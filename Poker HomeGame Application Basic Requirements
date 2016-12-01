@@ -23,9 +23,9 @@ Multiplayer
 	-multi table option,
 	-chat
 	-side pot calculation
-	-multiple game modes (no limit, pot limit, fixed limit), 
-	-game types (holdem, (4/5/6) omaha, 6ctf, 5ctd, 5csd, stud,
-		razz, indian, dealer's choice (choice of any of these when a player is on the button))
+	-multiple game modes (no limit, pot limit, fixed limit, hi/lo), 
+	-game types (holdem, (4/5/6) omaha, 6ctf, 5ctd, 5csd, stud, 
+		razz, indian, dealer's choice (choice of any of these when a player is on the button), badugi, 2-7 triple draw, )
 	-Host has option to kick player (IMPORTANT: ONLY WHEN NOT PLAYING A HAND)
 
 Deveopment Method Ideas
