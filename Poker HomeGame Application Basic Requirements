@@ -1,0 +1,38 @@
+Pokerr
+==========================
+
+E-Wallet
+	- No idea, big secuirty, apis (paypal for example)
+	- **Might not have to be an option, users could agree on how much they owe each other as this is a homegame (private game) app
+		however, having this can stop users from not paying each other when money is won fair and square
+	- Paypal api is most likely, as its more secure and more trustworthy to the user, paypal also have a large customer base
+	- Currently have to make the wallet GBP. (Could expand to other currencies if this app somehow grows)
+
+Simulator
+	-Nice, sleek design, kind of like pokerstars (not exactly, general look and feel of pokerstars is a good place to start), 
+	-be able to handle different gamemodes and be able to work out hand strengths of all game types
+	-hand replays
+	-Bet slider for making bet sizes
+	-Front end:
+		-Take user input (what their action is, how much they bet + validation etc)
+		-display cards (user's hand but not to other players*, display community cards, display others' cards when appropriate)
+
+Multiplayer
+	-Lobby which has all user created games, 
+	-common home game hosts,
+	-multi table option,
+	-chat
+	-side pot calculation
+	-multiple game modes (no limit, pot limit, fixed limit), 
+	-game types (holdem, (4/5/6) omaha, 6ctf, 5ctd, 5csd, stud,
+		razz, indian, dealer's choice (choice of any of these when a player is on the button))
+	-Host has option to kick player (IMPORTANT: ONLY WHEN NOT PLAYING A HAND)
+
+Deveopment Method Ideas
+	-Languages: Java, c++, c# (backend would run e.g. C++ for functionality)
+		- User downloads installation files from server
+	-Front-end program communicates with server in order to:
+		-connect with other homegame players
+		-retreive their hands
+		-work out who won the hand at showdown
+		-handle input validation from the user (such as betting an amount > their stack size)
