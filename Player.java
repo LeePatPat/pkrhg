@@ -35,6 +35,8 @@ public class Player {
 	public void dealToPlayer(Card card1, Card card2){
 		this.holeCards[0] = card1;
 		this.holeCards[1] = card2;
+		
+		//System.out.println("Test: " + holeCards[0].toString() + holeCards[1].toString());
 	}
 	
 	/*
@@ -54,11 +56,31 @@ public class Player {
 	
 	/*
 	 * How much this player will bet from their stack
+	 * 
+	 * returns true is the bet is valid
 	 */
 	public boolean makeBet(int bet){
 		if(bet>chips)
 			return false;
 		chips -= bet;
 		return true;
+	}
+	
+	/*
+	 * @see java.lang.Object#toString()
+	 * returns player's name and stack size
+	 */
+	public String toString(){
+		return this.name + " (" + this.chips + ")";
+	}
+	
+	/*
+	 * returns player's name, stack size and current hand (mainly used for testing only)
+	 */
+	public String toStringWithHand(){
+		Card[] cards = new Card[2];
+		cards = this.getHoleCards();
+		
+		return this.name + " (" + this.chips + "): " + cards[0].toString() + cards[1].toString();
 	}
 }

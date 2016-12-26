@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Dealer {	
 	private Deck deck;
 	private int pot;
@@ -13,7 +16,7 @@ public class Dealer {
 	/*
 	 * The dealer deals cards to specific player
 	 */
-	public void dealCard(Player p) throws NoCardsRemainingException{
+	public void dealCards(Player p) throws NoCardsRemainingException{
 		p.dealToPlayer(deck.dealCard(), deck.dealCard());
 	}
 	
@@ -61,5 +64,49 @@ public class Dealer {
 	 */
 	public Card dealTurnOrRiver() throws NoCardsRemainingException{
 		return deck.dealCard();
+	}
+	
+	/*
+	 * Takes in players (and their cards) and the community cards,
+	 * works out which player(s) has the best hand - reorders the player[] array
+	 * to have the 
+	 */
+	public Player[] analyseHand(Player[] players, Card[] communityCards){
+		ArrayList<ArrayList<Card>> hands = new ArrayList<ArrayList<Card>>();
+		
+		for(int i=0; i<players.length; i++){
+			hands.add(handCombiner(players[i].getHoleCards(), communityCards));
+		}
+		
+		handChecker(hands);
+		
+		return null;
+	}
+	
+	/*
+	 * Combines the player's hand with the community cards
+	 * and puts them in order
+	 * for ease of use when finding the strongest hand
+	 */
+	private ArrayList<Card> handCombiner(Card[] playerHand, Card[] comCards){
+		ArrayList<Card> hand = new ArrayList<Card>();
+		hand.add(playerHand[0]);
+		hand.add(playerHand[1]);	//hole cards
+		hand.add(comCards[0]); 
+		hand.add(comCards[1]);
+		hand.add(comCards[2]);		//community cards
+		hand.add(comCards[3]);
+		hand.add(comCards[4]);
+		
+		return hand;
+	}
+	
+	/*
+	 * Private method to determine the strength of the hand
+	 */
+	private int handChecker(ArrayList<ArrayList<Card>> hand){
+		
+		return 0;
+		
 	}
 }
