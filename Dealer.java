@@ -1,16 +1,19 @@
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Dealer {	
 	private Deck deck;
 	private int pot;
+	private ArrayList<Card> comCards;
 	
 	/*
-	 * This class deals with the dealing and handling of chips
+	 * This class deals with the dealing, handling of chips and hand analysis
 	 */
 	public Dealer(){
 		deck = new Deck();
 		shuffleDeck();
+		comCards = new ArrayList<Card>();
 	}
 	
 	/*
@@ -29,8 +32,10 @@ public class Dealer {
 	
 	/*
 	 * Reset the pot to zero. Happens after a player(s) win the pot(s)
+	 * Also removes the community cards
 	 */
-	public void resetPot(){
+	public void resetHand(){
+		comCards.clear();
 		pot=0;
 	}
 	
@@ -39,6 +44,13 @@ public class Dealer {
 	 */
 	public void addToPot(int bets){
 		pot+=bets;
+	}
+	
+	/*
+	 * Returns the current community cards
+	 */
+	public ArrayList<Card> getCommunityCards(){
+		return comCards;
 	}
 	
 	/*
@@ -53,17 +65,22 @@ public class Dealer {
 	 */
 	public Card[] dealFlop() throws NoCardsRemainingException{
 		Card[] flop = new Card[3];
-		flop[0] = deck.dealCard();
-		flop[1] = deck.dealCard();
-		flop[2] = deck.dealCard();
+		flop[0] = deck.dealCard(); comCards.add(flop[0]);
+		flop[1] = deck.dealCard(); comCards.add(flop[1]);
+		flop[2] = deck.dealCard(); comCards.add(flop[2]);
 		return flop;
 	}
 	
 	/*
 	 * Deals out the turn/river
 	 */
-	public Card dealTurnOrRiver() throws NoCardsRemainingException{
-		return deck.dealCard();
+	public Card dealTurnOrRiver() throws NoCardsRemainingException, CommunityCardsAlreadyDealtException{
+		if(comCards.size()!=3 || comCards.size()!=4){
+			//throw new CommunityCardsAlreadyDealtException("Community cards cannot be dealt");
+		}
+		
+		comCards.add(deck.dealCard());
+		return comCards.get(comCards.size()-1);
 	}
 	
 	/*
@@ -71,16 +88,30 @@ public class Dealer {
 	 * works out which player(s) has the best hand - reorders the player[] array
 	 * to have the 
 	 */
-	public Player[] analyseHand(Player[] players, Card[] communityCards){
+	public String[] analyseHand(ArrayList<Player> players, ArrayList<Card> communityCards){
 		ArrayList<ArrayList<Card>> hands = new ArrayList<ArrayList<Card>>();
-		
-		for(int i=0; i<players.length; i++){
-			hands.add(handCombiner(players[i].getHoleCards(), communityCards));
+		for(int i=0; i<players.size(); i++){
+			Card[] test = players.get(i).getHoleCards();
+			ArrayList<Card> playerHand = new ArrayList<Card>(Arrays.asList(players.get(i).getHoleCards()));
+			hands.add(handCombiner(playerHand, communityCards));
 		}
 		
-		handChecker(hands);
+		String[] playerHandRanks = new String[players.size()];
+		for(int i=0; i<players.size(); i++){						//playerHandRanks[i] = handChecker(hands.get(i));  //add back after testing hand combiner
+			playerHandRanks[i] = "";
+			for(int j=0; j<7; j++){
+				playerHandRanks[i] += hands.get(i).get(j).toString();
+			}
+		}
 		
-		return null;
+		return playerHandRanks;
+	}
+	
+	/*
+	 * Private method to determine the strength of the hand
+	 */
+	private String handChecker(ArrayList<Card> hand){
+		return "mad hand";
 	}
 	
 	/*
@@ -88,25 +119,26 @@ public class Dealer {
 	 * and puts them in order
 	 * for ease of use when finding the strongest hand
 	 */
-	private ArrayList<Card> handCombiner(Card[] playerHand, Card[] comCards){
-		ArrayList<Card> hand = new ArrayList<Card>();
-		hand.add(playerHand[0]);
-		hand.add(playerHand[1]);	//hole cards
-		hand.add(comCards[0]); 
-		hand.add(comCards[1]);
-		hand.add(comCards[2]);		//community cards
-		hand.add(comCards[3]);
-		hand.add(comCards[4]);
+	private ArrayList<Card> handCombiner(ArrayList<Card> playerHand, ArrayList<Card> comCards){
+		playerHand.addAll(comCards); //combine both arlists
+
+		Card[] hand = new Card[playerHand.size()];
+		hand = playerHand.toArray(hand);
 		
-		return hand;
-	}
-	
-	/*
-	 * Private method to determine the strength of the hand
-	 */
-	private int handChecker(ArrayList<ArrayList<Card>> hand){
+		//sort the cards into decending order (using insertion sort as it works best for small lists)
+		int i, j, first;
+		Card temp;
+		for(i = hand.length-1; i>0; i--){
+			first = 0;
+			for(j=1; j<=i; j++)
+ 				if(hand[j].getValue() < hand[first].getValue())
+					first = j;
+			temp = hand[first];
+			hand[first] = hand[i];
+			hand[i] = temp;
+		}
 		
-		return 0;
-		
+		ArrayList<Card> handtest = new ArrayList<Card>(Arrays.asList(hand));	
+		return handtest;
 	}
 }

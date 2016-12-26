@@ -33,4 +33,19 @@ public class Card {
 	public String toString(){
 		return valueString[value] + suitString[suit];
 	}
+	
+	/*
+	 * Compares this card object to another card
+	 * return	1 - this > c
+	 * return	0 - this = c
+	 * return  -1 - this < c
+	 */
+	public int compareTo(Card c){
+		if(this.getValue() > c.getValue())
+			return 1;
+		else if(this.getValue() == c.getValue())
+			return 0;
+		
+		return -1; //this.value < c.value
+	}
 }
