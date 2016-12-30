@@ -4,6 +4,7 @@ public class Player {
 	private String name;
 	private int chips;
 	private Card[] holeCards;
+	private boolean hasCards;
 	
 	/*
 	 * This class represents a player on the table
@@ -13,6 +14,7 @@ public class Player {
 		this.chips = chips;
 		holeCards = new Card[2];
 		holeCards[0]=null;holeCards[1]=null;
+		hasCards = false;
 	}
 	
 	/*
@@ -20,6 +22,13 @@ public class Player {
 	 */
 	public String getName(){
 		return name;
+	}
+	
+	/*
+	 * Returns whether or not the player has hole cards
+	 */
+	public boolean hasCards(){
+		return hasCards;
 	}
 	
 	/*
@@ -35,7 +44,7 @@ public class Player {
 	public void dealToPlayer(Card card1, Card card2){
 		this.holeCards[0] = card1;
 		this.holeCards[1] = card2;
-		
+		hasCards = true;
 		//System.out.println("Test: " + holeCards[0].toString() + holeCards[1].toString());
 	}
 	
@@ -43,7 +52,10 @@ public class Player {
 	 * Gets the user's hole cards from them.
 	 */
 	public Card[] getHoleCards(){
-		return this.holeCards;
+		if(hasCards)
+			return this.holeCards;
+		System.err.println("Player ("+this.name+") has no hole cards.");
+		return null;
 	}
 	
 	/*
@@ -52,6 +64,7 @@ public class Player {
 	public void foldHoleCards(){
 		this.holeCards[0] = null;
 		this.holeCards[1] = null;
+		hasCards=false;
 	}
 	
 	/*

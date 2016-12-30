@@ -34,15 +34,22 @@ public class Main {
 		Card turn = dealer.dealTurnOrRiver();
 		Card river = dealer.dealTurnOrRiver();
 		
-		String[] handRank = dealer.analyseHand(table.getPlayers(), dealer.getCommunityCards());
-		
-		for(int i=0; i<table.getPlayers().size(); i++){
-			System.out.println(table.getPlayers().get(i).toStringWithHand() + "    (" + handRank[i] + ")" );
-		}
-		
 		System.out.print("\nCommunity: " + flop[0].toString() + flop[1].toString() + flop[2].toString());
 		System.out.print(" " + turn.toString());
 		System.out.print(" " + river.toString());
+		System.out.println();
+		
+		for(int i=0; i<table.getPlayers().size(); i++){
+			System.out.println(table.getPlayers().get(i).toStringWithHand());// + "    (" + handRank[i] + ")" );
+		}
+		
+//		String[] handRank = dealer.analyseHand(table.getPlayers(), dealer.getCommunityCards());
+//		
+//		for(int i=0; i<table.getPlayers().size(); i++){
+//			System.out.println(table.getPlayers().get(i).toStringWithHand() + "    (" + handRank[i] + ")" );
+//		}
+		
+		
 		
 		
 	}
