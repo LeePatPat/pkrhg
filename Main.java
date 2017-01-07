@@ -1,20 +1,21 @@
+import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) throws NoCardsRemainingException, CommunityCardsAlreadyDealtException {
 		
-		Dealer dealer = new Dealer();
+		//Dealer dealer = new Dealer();
 		int[] blinds = {1,2};
 		Table table = new Table(9, blinds);
 		
-		Player p1 = new Player("a", 4000);
-		Player p2 = new Player("b", 7500);
-		Player p3 = new Player("c", 3123);
-		Player p4 = new Player("d", 5500);
+		Player p1 = new Player("a", 40000);
+		Player p2 = new Player("b", 75000);
+		Player p3 = new Player("c", 31230);
+		Player p4 = new Player("d", 55000);
 		Player p5 = new Player("e", 10250);
-		Player p6 = new Player("f", 5200);
-		Player p7 = new Player("g", 300);
-		Player p8 = new Player("h", 750);
+		Player p6 = new Player("f", 52000);
+		Player p7 = new Player("g", 30000);
+		Player p8 = new Player("h", 75000);
 		Player p9 = new Player("i", 11250);
 		
 		table.addPlayer(p1);
@@ -30,28 +31,25 @@ public class Main {
 		
 		table.dealHands();
 		
-		Card[] flop = dealer.dealFlop();
-		Card turn = dealer.dealTurnOrRiver();
-		Card river = dealer.dealTurnOrRiver();
 		
-		System.out.print("\nCommunity: " + flop[0].toString() + flop[1].toString() + flop[2].toString());
-		System.out.print(" " + turn.toString());
-		System.out.print(" " + river.toString());
+		
+		ArrayList<Card> cc = table.dealComCards();
+		System.out.print("\nCommunity: " + cc.get(0).toString() + cc.get(1).toString() + cc.get(2).toString());
+		System.out.print(" " + cc.get(3).toString());
+		System.out.print(" " + cc.get(4).toString());
 		System.out.println();
 		
+		String[] handRanks = table.analyseHand(table.getPlayers(), table.getComCards());
+		
 		for(int i=0; i<table.getPlayers().size(); i++){
-			System.out.println(table.getPlayers().get(i).toStringWithHand());// + "    (" + handRank[i] + ")" );
+			System.out.println(table.getPlayers().get(i).toStringWithHand()
+					+ "  ("
+					+ handRanks[i]
+					+ ")"
+					);
 		}
 		
-//		String[] handRank = dealer.analyseHand(table.getPlayers(), dealer.getCommunityCards());
-//		
-//		for(int i=0; i<table.getPlayers().size(); i++){
-//			System.out.println(table.getPlayers().get(i).toStringWithHand() + "    (" + handRank[i] + ")" );
-//		}
-		
-		
-		
-		
+		System.out.println("\nDone");
 	}
 
 }

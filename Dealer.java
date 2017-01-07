@@ -11,15 +11,14 @@ public class Dealer {
 	 */
 	public Dealer(){
 		deck = new Deck();
-		shuffleDeck();
 		comCards = new ArrayList<Card>();
 	}
 
 	/*
 	 * The dealer deals cards to specific player
 	 */
-	public void dealCards(Player p) throws NoCardsRemainingException{
-		p.dealToPlayer(deck.dealCard(), deck.dealCard());
+	public Card dealCard() throws NoCardsRemainingException{
+		return deck.dealCard();
 	}
 
 	/*
@@ -53,33 +52,15 @@ public class Dealer {
 	}
 
 	/*
-	 * Dealer shuffles the deck for reuse
+	 * Deals community cards
 	 */
-	public void shuffleDeck(){
-		deck.shuffle();
-	}
-
-	/*
-	 * Deals out the first 3 cards (flop)
-	 */
-	public Card[] dealFlop() throws NoCardsRemainingException{
-		Card[] flop = new Card[3];
-		flop[0] = deck.dealCard(); comCards.add(flop[0]);
-		flop[1] = deck.dealCard(); comCards.add(flop[1]);
-		flop[2] = deck.dealCard(); comCards.add(flop[2]);
-		return flop;
-	}
-
-	/*
-	 * Deals out the turn/river
-	 */
-	public Card dealTurnOrRiver() throws NoCardsRemainingException, CommunityCardsAlreadyDealtException{
-		if(comCards.size()!=3 || comCards.size()!=4){
-			//throw new CommunityCardsAlreadyDealtException("Community cards cannot be dealt");
-		}
-
-		comCards.add(deck.dealCard());
-		return comCards.get(comCards.size()-1);
+	public ArrayList<Card> dealComCards() throws NoCardsRemainingException{
+		comCards.add(this.dealCard());
+		comCards.add(this.dealCard());
+		comCards.add(this.dealCard());
+		comCards.add(this.dealCard());
+		comCards.add(this.dealCard());
+		return comCards;
 	}
 
 	/*
@@ -113,16 +94,15 @@ public class Dealer {
 	 * Private method to determine the strength of the hand
 	 * Strengths: Straight flush, quads, full house, flush, straight, trips, 2pair, pair, high card
 	 */
-	private String handChecker(ArrayList<Card> hand){
-		
-		HandAnalyser ha = new HandAnalyser(hand);
+	private String handChecker(ArrayList<Card> hand){		
+		HandAnalyser ha = new HandAnalyser();
 		
 		boolean flush = ha.flushCheck(hand);
 		boolean straight = ha.straightCheck(hand);
 		if(straight && flush && ha.straightFlushCheck(hand))
 			return "straight flush";
 
-		//if theres a straight or flush present its impossible for a
+		//if there's no flush/straight, check for Quads/boat etc
 		if(flush) return "flush";
 		
 		else if(straight) return "straight";
@@ -131,7 +111,7 @@ public class Dealer {
 			int[] valOcc = ha.valueOccurrence(hand);	//[quadsBool, tripsBool, pairCount]
 
 			if(valOcc[0] == 1) return "quads";
-			else if(valOcc[1] > 0 && valOcc[2] > 0) return "full house"; //trips+pair = full house (AAAKK23 = full house)
+			else if((valOcc[1] > 0 && valOcc[2] > 0) || valOcc[1] > 1) return "full house"; //trips+pair = full house (AAAKK23 = full house)
 			else if(valOcc[1] > 0) return "trips";
 			else if(valOcc[2] >= 2) return "two pair";
 			else if(valOcc[2] == 1) return "pair";
@@ -166,6 +146,22 @@ public class Dealer {
 
 		ArrayList<Card> handtest = new ArrayList<Card>(Arrays.asList(hand));	
 		return handtest;
+	}
+	
+	/*
+	 * Used for testing certain cases
+	 */
+	public void handTester(){
+		ArrayList<Card> test = new ArrayList<Card>();
+		test.add(new Card(12,3));
+		test.add(new Card(10,2));
+		test.add(new Card(10,1));
+		test.add(new Card(10,0));
+		test.add(new Card(8,1));
+		test.add(new Card(8,0));
+		test.add(new Card(4,2));
+		
+		System.out.println("RESULT OF HAND TESTER: " + this.handChecker(test));
 	}
 
 }

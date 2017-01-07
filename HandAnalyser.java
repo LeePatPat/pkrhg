@@ -5,12 +5,10 @@ import java.util.ArrayList;
  * The dealer uses this to analyse hands
  */
 public class HandAnalyser{
-	ArrayList<Card> hand;
 	int flushSuitValue, straightHighValue;
 	boolean wheel, straight, flush;
 
-	public HandAnalyser(ArrayList<Card> hand){
-		this.hand = hand;
+	public HandAnalyser(){
 		flushSuitValue = -1;
 		straightHighValue = -1;
 		wheel = false;
@@ -68,38 +66,54 @@ public class HandAnalyser{
 	/*
 	 * Private method to check the occurrence of quads, trips, and pairs
 	 */
-	public int[] valueOccurrence(ArrayList<Card> hand){
-		int trips=0,pairCount=0;
-		//0123456
-		for(int i=0; i<hand.size()-1;){  //AAAA432   AAA9964
-			int occ = 0;
-			int currentVal = hand.get(i).getValue();
-
-			for(int j=i+1; j < hand.size()-1;j++){ //loop through all elements after the current
-				if(hand.get(j).getValue() == currentVal){
-					occ++;
-					if(occ==4){
-						int[] quads = {1,0,0};
-						return quads;
+	public int[] valueOccurrence(ArrayList<Card> hand){		//AKKKKTT	   KT87763
+		int i = 0, j = 0;
+		int pairCount = 0, trips = 0;
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		
+		//put all values into an arraylist
+		for(Card c : hand){
+			values.add(c.getValue());
+		}
+		
+		//loop through the values and count how many times a value repeats itself
+		while(i<values.size()-1){
+			int count = 0;
+			if(hand.get(i).getValue() != hand.get(i+1).getValue()){
+				i++;		//no occurence of a value, move onto the next value in list
+				continue;
+			}else{
+				count++;	//repeat detected - count any additional repetitions
+				j=i+2;
+				while(j < hand.size()){
+					if(hand.get(j).getValue() != hand.get(i).getValue()){
+						i=j;
+						if(count==1) pairCount++;
+						if(count==2) trips++;
+						break;
+					}else{
+						count++;
+						j++;
+						if(count==3){
+							int[] occ = {1,0,0};
+							return occ;
+						}
 					}
-				}else{
-					i=j;
 				}
 			}
-
-			if(occ==3) trips++;
-			if(occ==2) pairCount++;
 		}
-
-		int[] occ = {0,trips, pairCount};
-
+		
+		int[] occ = {0, trips, pairCount};
 		return occ;
 	}
 
 	/*
 	 * Private method to check if a straight is present
 	 */
-	public boolean straightCheck(ArrayList<Card> hand){
+	public boolean straightCheck(ArrayList<Card> orighand){
+		ArrayList<Card> hand = new ArrayList<Card>();
+		hand.addAll(orighand);
+		
 		for(int i=0; i<hand.size(); i++){	//remove any repetitive values in the hand
 			Card current = hand.get(i);
 
@@ -125,6 +139,7 @@ public class HandAnalyser{
 				while(j<i+4){
 					if(hand.get(j).getValue() != hand.get(j+1).getValue()+1) {
 						correct=0;
+						i++;
 						break;
 					} else if(hand.get(j).getValue() == hand.get(j+1).getValue()+1) {
 						correct++;

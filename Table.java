@@ -4,6 +4,7 @@ public class Table {
 	
 	private ArrayList<Player> players;
 	private ArrayList<Player> waitingList;
+	private ArrayList<Card> comCards;
 	private Dealer dealer;
 	private int tableSize;
 	private int blinds[];
@@ -15,11 +16,27 @@ public class Table {
 	 * 		  blinds - the blind levels for the table
 	 */
 	public Table(int size, int[] blinds){
-		tableSize = size;
+		comCards = new ArrayList<Card>();
 		players = new ArrayList<Player>();
 		waitingList = new ArrayList<Player>();
 		dealer = new Dealer();
+		tableSize = size;
 		this.blinds = blinds;	//not just sb/bb because you can have games like 1/1/2 etc
+	}
+	
+	/*
+	 * The dealer deals the community cards
+	 */
+	public ArrayList<Card> dealComCards() throws NoCardsRemainingException{
+		comCards = dealer.dealComCards();
+		return dealer.getCommunityCards();
+	}
+	
+	/*
+	 * Returns the current community cards
+	 */
+	public ArrayList<Card> getComCards(){
+		return comCards;
 	}
 	
 	/*
@@ -34,9 +51,12 @@ public class Table {
 		players.add(p);
 	}
 	
+	/*
+	 * Deals two hole cards to each player at the table
+	 */
 	public void dealHands() throws NoCardsRemainingException{
 		for(Player p : players){
-			dealer.dealCards(p);
+			p.dealToPlayer(dealer.dealCard(), dealer.dealCard());
 		}
 		System.out.println("Cards Dealt!");
 	}
@@ -55,14 +75,24 @@ public class Table {
 			players.add(waitingList.get(0));
 	}
 	
-	
+	/*
+	 * Returns the list of players at the table
+	 */
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}
+
 	/*
 	 * Number of players currently sat at the table
 	 */
 	public int numPlayers(){
 		return players.size();
+	}
+	
+	/*
+	 * Tells the dealer to analyse the hand
+	 */
+	public String[] analyseHand(ArrayList<Player> players, ArrayList<Card> commCards){
+		return dealer.analyseHand(players, this.getComCards());
 	}
 }

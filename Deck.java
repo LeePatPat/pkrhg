@@ -1,58 +1,40 @@
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Deck {
-	
-	private Card[] deck;
-	private int numCardsDealt;
-	private final int DECK_SIZE = 52;
-	
+
+	private ArrayList<Card> deck;
+
 	public Deck(){
-		deck = new Card[DECK_SIZE];
+		deck = new ArrayList<Card>();
 		createDeck();
-		numCardsDealt = 0; //keeps track of the number of cards remaining in the deck
 	}
-	
-	/*
-	 * Shuffles the deck to be used in dealing the cards
-	 * When this method is called, it also resets the deck to having 52 cards
-	 * Todo: replace with true randomness system
-	 */
-	public void shuffle(){
-		for (int i= deck.length-1; i>0; i--){
-			int rng = (int)(Math.random()*(i+1));
-			Card temp = deck[i];
-			deck[i] = deck[rng];
-			deck[rng] = temp;
-		}
-		numCardsDealt = 0;
-	}
-	
+
 	/*
 	 * Returns the number of cards remaining in the deck
 	 */
 	public int cardsRemaining(){
-		return deck.length - numCardsDealt;
+		return deck.size();
 	}
-	
+
 	/*
 	 * Returns a card from the top of the deck
 	 */
 	public Card dealCard() throws NoCardsRemainingException{
-		if(numCardsDealt == deck.length)
-			throw new NoCardsRemainingException("No cards remaining in deck");
-		numCardsDealt++;
-		return deck[numCardsDealt - 1];
+		if(deck.size()==0)
+			throw new NoCardsRemainingException("No Cards Remaining in Deck");
+		Random rng = new Random();
+		int i = rng.nextInt(deck.size());
+		return deck.remove(i);
 	}
-	
-	
+
+
 	/*
 	 * Quick private method to create deck with cards in order
 	 */
 	private void createDeck(){
-		int deckCount = 0; //tracks the number of cards created
 		for (int suit=0; suit<=3; suit++)
-			for (int value = 0; value <= 12; value++){
-				deck[deckCount] = new Card(suit, value); //e.g. (0,12) = Ace of Spades
-				deckCount++;
-			}
+			for (int value = 0; value <= 12; value++)
+				deck.add(new Card(suit, value)); //e.g. (0,12) = Ace of Spades
 	}
 }
