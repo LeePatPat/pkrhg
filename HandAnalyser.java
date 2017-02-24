@@ -187,13 +187,13 @@ public class HandAnalyser{
 		}
 
 		if(s>=5){
-			flushSuitValue = 0; flush = true;
+			flushSuitValue = 0; flush = true; return true;
 		} else if(h>=5){
-			flushSuitValue = 1; flush = true;
+			flushSuitValue = 1; flush = true; return true;
 		} else if(d>=5){
 			flushSuitValue = 2; flush = true; return true;
 		} else if(c>=5){
-			flushSuitValue = 3; flush = true;
+			flushSuitValue = 3; flush = true; return true;
 		}
 
 		flush = false;
