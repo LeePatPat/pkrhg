@@ -64,47 +64,33 @@ public class HandAnalyser{
 	}
 
 	/*
-	 * Private method to check the occurrence of quads, trips, and pairs
+	 * Private method to check the occurrence of quads, trips, and pairs. 
+	 * returns [1,1,1] means 1x4OAK  1x3OAK  1xPair   (this is not possible, but you get the point)
+	 * ***this needs optimised***
 	 */
-	public int[] valueOccurrence(ArrayList<Card> hand){		//AKKKKTT	   KT87763
-		int i = 0, j = 0;
-		int pairCount = 0, trips = 0;
-		ArrayList<Integer> values = new ArrayList<Integer>();
+	public int[] valueOccurrence(ArrayList<Card> orighand){		//AKKKKTT	   KT87763
+		ArrayList<Card> hand = new ArrayList<Card>();
+		hand.addAll(orighand);
 		
-		//put all values into an arraylist
-		for(Card c : hand){
-			values.add(c.getValue());
+		int pair = 0, trips = 0, counter = 0;
+		
+		for(int i=0; i<hand.size();){
+			counter = 0;
+			Card currentCard = hand.get(i);
+			
+			for(Card card : hand)
+				if(currentCard.getValue() == card.getValue()) 
+					counter++;
+			
+			for(int j=counter; j>0; j--)
+				hand.remove(0);
+			
+			if(counter == 2) pair++;
+			if(counter == 3) trips++;
+			if(counter == 4) return new int[]{1,0,0};
 		}
 		
-		//loop through the values and count how many times a value repeats itself
-		while(i<values.size()-1){
-			int count = 0;
-			if(hand.get(i).getValue() != hand.get(i+1).getValue()){
-				i++;		//no occurence of a value, move onto the next value in list
-				continue;
-			}else{
-				count++;	//repeat detected - count any additional repetitions
-				j=i+2;
-				while(j < hand.size()){
-					if(hand.get(j).getValue() != hand.get(i).getValue()){
-						i=j;
-						if(count==1) pairCount++;
-						if(count==2) trips++;
-						break;
-					}else{
-						count++;
-						j++;
-						if(count==3){
-							int[] occ = {1,0,0};
-							return occ;
-						}
-					}
-				}
-			}
-		}
-		
-		int[] occ = {0, trips, pairCount};
-		return occ;
+		return new int[]{0,trips,pair};
 	}
 
 	/*
@@ -178,11 +164,11 @@ public class HandAnalyser{
 		int s=0,h=0,d=0,c=0;
 		for(Card card : hand){
 			switch(card.getSuit()){
-			case 0: s++;break;
-			case 1: h++;break;
-			case 2: d++;break;
-			case 3: c++;break;
-			default: System.err.println("Error: flushCheck() method has taken an invalid path");break;
+				case 0: s++;break;
+				case 1: h++;break;
+				case 2: d++;break;
+				case 3: c++;break;
+				default: System.err.println("Error: flushCheck() method has taken an invalid path");break;
 			}
 		}
 
