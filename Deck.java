@@ -30,6 +30,21 @@ public class Deck {
 
 
 	/*
+	 * Retrieve specific cards (WARNING: SHOULD ONLY EVER BE USED FOR DEBUGGING)
+	 */
+	public Card getSpecificCard(int value, int suit){
+		int i=0;
+		for(Card card : deck){
+			if(card.getValue()==value && card.getSuit()==suit){
+				return deck.remove(i);
+			}
+			i++;
+		}
+		
+		return null;
+	}
+	
+	/*
 	 * Quick private method to create deck with cards in order
 	 */
 	private void createDeck(){

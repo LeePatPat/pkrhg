@@ -15,6 +15,13 @@ public class Dealer {
 	}
 
 	/*
+	 * SHOULD ONLY EVER BE USED FOR DEBUGGING
+	 */
+	public Card getSpecificCard(int value, int suit){
+		return deck.getSpecificCard(value, suit);
+	}
+	
+	/*
 	 * The dealer deals cards to specific player
 	 */
 	public Card dealCard() throws NoCardsRemainingException{

@@ -25,6 +25,13 @@ public class Table {
 	}
 	
 	/*
+	 * SHOULD ONLY BE USED FOR DEBUGGING
+	 */
+	public Card getSpecificCard(int value, int suit){
+		return dealer.getSpecificCard(value, suit);
+	}
+	
+	/*
 	 * The dealer deals the community cards
 	 */
 	public ArrayList<Card> dealComCards() throws NoCardsRemainingException{
