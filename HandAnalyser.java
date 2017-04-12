@@ -84,8 +84,8 @@ public class HandAnalyser{
 				hand.remove(0);
 			
 			if(counter == 2) pair++;
-			if(counter == 3) trips++;
-			if(counter == 4) return new int[]{1,0,0};
+			else if(counter == 3) trips++;
+			else if(counter == 4) return new int[]{1,0,0};
 		}
 		
 		return new int[]{0,trips,pair};
