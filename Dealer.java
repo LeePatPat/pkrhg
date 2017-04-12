@@ -13,7 +13,17 @@ public class Dealer {
 		deck = new Deck();
 		comCards = new ArrayList<Card>();
 	}
-
+	
+	/*
+	 * USED FOR TESTING ONLY
+	 */
+	public ArrayList<Card> setComCards(ArrayList<Card> cards){
+		comCards.clear();
+		comCards.addAll(cards);
+//		System.out.println(comCards.toString());
+		return comCards;
+	}
+	
 	/*
 	 * SHOULD ONLY EVER BE USED FOR DEBUGGING
 	 */
@@ -57,7 +67,7 @@ public class Dealer {
 	public ArrayList<Card> getCommunityCards(){
 		return comCards;
 	}
-
+	
 	/*
 	 * Deals community cards
 	 */
@@ -106,7 +116,7 @@ public class Dealer {
 		
 		boolean flush = ha.flushCheck(hand);
 		boolean straight = ha.straightCheck(hand);
-		if(straight && flush && ha.straightFlushCheck(hand))
+		if(ha.straight && ha.flush && ha.straightFlushCheck(hand))
 			return "straight flush";
 
 		//if there's no flush/straight, check for Quads/boat etc

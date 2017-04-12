@@ -24,6 +24,19 @@ public class Table {
 		this.blinds = blinds;	//not just sb/bb because you can have games like 1/1/2 etc
 	}
 	
+	public void setComCards(ArrayList<Card> cards){
+		this.comCards.clear();
+		this.comCards = dealer.setComCards(cards);
+//		System.out.println(comCards.toString());
+	}
+	
+	/*
+	 * Used for debugging only ty
+	 */
+	public void givePlayerCard(Card card, Player player){
+		player.dealCardToPlayer(card);
+	}
+	
 	/*
 	 * SHOULD ONLY BE USED FOR DEBUGGING
 	 */
@@ -38,7 +51,7 @@ public class Table {
 		comCards = dealer.dealComCards();
 		return dealer.getCommunityCards();
 	}
-	
+
 	/*
 	 * Returns the current community cards
 	 */

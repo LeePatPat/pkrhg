@@ -23,42 +23,40 @@ public class HandAnalyser{
 		if(!straight || !flush) return false;
 
 		ArrayList<Card> flushOnlyHand = new ArrayList<Card>(); //separate the cards which are of the flush
-		for(Card c : hand)
-			if(c.getSuit() == flushSuitValue)
-				flushOnlyHand.add(c);
+		for(Card card : hand)
+			if(card.getSuit() == flushSuitValue)
+				flushOnlyHand.add(card);
 		hand = flushOnlyHand;
-
+		
 		int correct = 0;
-		if(!wheel){
-			int i=0;
-			while(i < hand.size()-5+1){
-				if(hand.get(i).getValue() != hand.get(i+1).getValue()+1){
-					i++;
-					continue;
-				}else if(hand.get(i).getValue() == hand.get(i+1).getValue()+1){		//[AQ987]65  A[Q9876]5   AQ[98765]
-					int j=i+1;
-					while(j < i+4){
-						if(hand.get(j).getValue() != hand.get(j+1).getValue()+1) {
-							correct=0;
-							break;
-						} else if(hand.get(j).getValue() == hand.get(j+1).getValue()+1) {
-							correct++;
-							j++;
-							if(correct>=3){
-								straightHighValue = hand.get(i).getValue();
-								return true;
-							}
+		int i=0;
+		
+		while(i < hand.size()-5+1){
+			if(hand.get(i).getValue() != hand.get(i+1).getValue()+1){
+				i++;
+				continue;
+			}else if(hand.get(i).getValue() == hand.get(i+1).getValue()+1){		//[AQ987]65  A[Q9876]5   AQ[98765]
+				int j=i+1;
+				while(j < i+4){
+					if(hand.get(j).getValue() != hand.get(j+1).getValue()+1) {
+						correct=0;
+						break;
+					} else if(hand.get(j).getValue() == hand.get(j+1).getValue()+1) {
+						correct++;
+						j++;
+						if(correct>=3){
+							straightHighValue = hand.get(i).getValue();
+							return true;
 						}
 					}
 				}
 			}
-
-		}else{ //if is wheel straight
-			if(hand.get(0).getValue()==12 && hand.get(hand.size()-1).getValue()==0
-					&& hand.get(hand.size()-2).getValue()==1 && hand.get(hand.size()-3).getValue()==2
-					&& hand.get(hand.size()-4).getValue()==3)
-				return true;
 		}
+
+		if(hand.get(0).getValue()==12 && hand.get(hand.size()-1).getValue()==0
+				&& hand.get(hand.size()-2).getValue()==1 && hand.get(hand.size()-3).getValue()==2
+				&& hand.get(hand.size()-4).getValue()==3)
+			return true;
 
 		return false;
 	}
@@ -132,6 +130,7 @@ public class HandAnalyser{
 						j++;
 						if(correct>=3){
 							straightHighValue = hand.get(i).getValue();
+							this.straight = true;
 							return true;
 						}
 					}
@@ -151,9 +150,12 @@ public class HandAnalyser{
 
 		//we can do this because we have removed any duplicates in both straightFlushCheck and straightCheck
 		//			3												4										5
-		if(hand.get(hand.size()-2).getValue()==1 && hand.get(hand.size()-3).getValue()==2 && hand.get(hand.size()-4).getValue()==3)
+		if(hand.get(hand.size()-2).getValue()==1 && hand.get(hand.size()-3).getValue()==2 && hand.get(hand.size()-4).getValue()==3){
+			this.straight = true;
+			this.wheel = true;
 			return true;
-
+		}
+		
 		return false;
 	}
 

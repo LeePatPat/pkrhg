@@ -18,6 +18,21 @@ public class Player {
 	}
 	
 	/*
+	 * use for debugging only ty
+	 */
+	public boolean dealCardToPlayer(Card card){
+		if (holeCards[0] != null && holeCards[1] != null)
+			return false;
+		if(holeCards[0]==null){
+			holeCards[0] = card;
+			return true;
+		}
+		holeCards[1] = card;
+		hasCards = true;
+		return true;
+	}
+	
+	/*
 	 * Returns the player's name
 	 */
 	public String getName(){
